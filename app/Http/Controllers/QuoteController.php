@@ -19,11 +19,11 @@ class QuoteController extends Controller
   public function view($formtype, $id='') {
     //return 'view '.$id;
 
-    $data['head'] = DB::table('quotation')->first();
-    $transno = $data['head']->TransNo; 
+    $data['data'] = DB::table('quotation')->first();
+    $transno = $data['data']->TransNo; 
     $transno = 'DO.1800011'; //debug
     // dd($data['head']->TransNo);
-    $detail = DB::table('transdetail')->where('TransNo',$transno)->orderBy('id','ASC')->select('ProductCode','ProductName','UOM','Qty','Price','Qty','Price','id')->get();
+    $detail = DB::table('transdetail')->where('TransNo',$transno)->orderBy('id','ASC')->select('ProductCode','ProductName','UOM','Qty','Price','Qty','id')->get();
     foreach($detail as $d) {
         $d->Qty = abs($d->Qty);
         $d->Amount = abs($d->Qty) * $d->Price; 
