@@ -722,10 +722,15 @@
     <div class="col-xs-12 visible-xs visible-sm"><br></div>
 
     <div class="col-xs-12 col-md-6 col-md-offset-2 col-lg-4 col-lg-offset-4">
+        @php
+            $taxrate=11;
+            $taxamount = $subtotal*$taxrate/100;
+            $total = $subtotal + $taxamount;
+        @endphp
         <table class="table table-bordered text-right">
             <tr>
                 <td style="width: 40%;">Subtotal</td>
-                <td style="width: 60%;"class="amount">$0,00</td>
+                <td style="width: 60%;"class="amount">{{$subtotal??0}}</td>
             </tr>
             <tr>
                 <td>Item Tax</td>
@@ -733,7 +738,7 @@
             </tr>
             <tr>
                 <td>Quote Tax</td>
-                <td>$0,00</td>
+                <td>{{$taxamount}}</td>
             </tr>
             <tr>
                 <td class="td-vert-middle">Discount</td>
@@ -760,7 +765,7 @@
             </tr>
             <tr>
                 <td><b>Total</b></td>
-                <td class="amount"><b>$0,00</b></td>
+                <td class="amount"><b>{{$total??0}}</b></td>
             </tr>
         </table>
     </div>
