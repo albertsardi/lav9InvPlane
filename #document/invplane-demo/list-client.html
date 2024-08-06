@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+    <title>Aulas univirtuales</title>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="NOINDEX,NOFOLLOW">
+
+<link rel="icon" type="image/png" href="https://demo.invoiceplane.com/assets/core/img/favicon.png">
+
+<link rel="stylesheet" href="https://demo.invoiceplane.com/assets/invoiceplane_blue/css/style.css?v=1.6.1">
+<link rel="stylesheet" href="https://demo.invoiceplane.com/assets/core/css/custom.css?v=1.6.1">
+
+    <link rel="stylesheet" href="https://demo.invoiceplane.com/assets/invoiceplane_blue/css/monospace.css?v=1.6.1">
+
+<!--[if lt IE 9]>
+<script src="https://demo.invoiceplane.com/assets/core/js/legacy.min.js?v=1.6.1"></script>
+<![endif]-->
+
+<script src="https://demo.invoiceplane.com/assets/core/js/dependencies.min.js?v=1.6.1"></script>
+
+<script>
+    Dropzone.autoDiscover = false;
+
+    
+    $(function () {
+        $('.nav-tabs').tab();
+        $('.tip').tooltip();
+
+        $('body').on('focus', '.datepicker', function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: 'mm/dd/yyyy',
+                language: 'en',
+                weekStart: '0',
+                todayBtn: "linked"
+            });
+        });
+
+        $(document).on('click', '.create-invoice', function () {
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_create_invoice");
+        });
+
+        $(document).on('click', '.create-quote', function () {
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_create_quote");
+        });
+
+        $(document).on('click', '#btn_quote_to_invoice', function () {
+            var quote_id = $(this).data('quote-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_quote_to_invoice/" + quote_id);
+        });
+
+        $(document).on('click', '#btn_copy_invoice', function () {
+            var invoice_id = $(this).data('invoice-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_copy_invoice", {invoice_id: invoice_id});
+        });
+
+        $(document).on('click', '#btn_create_credit', function () {
+            var invoice_id = $(this).data('invoice-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_create_credit", {invoice_id: invoice_id});
+        });
+
+        $(document).on('click', '#btn_copy_quote', function () {
+            var quote_id = $(this).data('quote-id');
+            var client_id = $(this).data('client-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_copy_quote", {
+                quote_id: quote_id,
+                client_id: client_id
+            });
+        });
+
+        $(document).on('click', '.client-create-invoice', function () {
+            var client_id = $(this).data('client-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_create_invoice", {client_id: client_id});
+        });
+
+        $(document).on('click', '.client-create-quote', function () {
+            var client_id = $(this).data('client-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_create_quote", {client_id: client_id});
+        });
+
+        $(document).on('click', '.invoice-add-payment', function () {
+            var invoice_id = $(this).data('invoice-id');
+            var invoice_balance = $(this).data('invoice-balance');
+            var invoice_payment_method = $(this).data('invoice-payment-method');
+            var payment_cf_exist =  $(this).data('payment-cf-exist');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/payments/ajax/modal_add_payment", {
+                invoice_id: invoice_id,
+                invoice_balance: invoice_balance,
+                invoice_payment_method: invoice_payment_method,
+                payment_cf_exist: payment_cf_exist
+            });
+        });
+
+    });
+</script>
+</head>
+<body class="">
+
+<noscript>
+    <div class="alert alert-danger no-margin">Please enable Javascript to use InvoicePlane</div>
+</noscript>
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ip-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                Menu &nbsp; <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="ip-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="https://demo.invoiceplane.com/dashboard" class="hidden-md">Dashboard</a>                    <a href="https://demo.invoiceplane.com/dashboard" class="visible-md-inline-block"><i class="fa fa-dashboard"></i></a>                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Clients</span>
+                        <i class="visible-md-inline fa fa-users"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/clients/form">Add Client</a></li>
+                        <li><a href="https://demo.invoiceplane.com/clients/index">View Clients</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Quotes</span>
+                        <i class="visible-md-inline fa fa-file"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="create-quote">Create Quote</a></li>
+                        <li><a href="https://demo.invoiceplane.com/quotes/index">View Quotes</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Invoices</span>
+                        <i class="visible-md-inline fa fa-file-text"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="create-invoice">Create Invoice</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoices/index">View Invoices</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoices/recurring/index">View Recurring Invoices</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Payments</span>
+                        <i class="visible-md-inline fa fa-credit-card"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/payments/form">Enter Payment</a></li>
+                        <li><a href="https://demo.invoiceplane.com/payments/index">View Payments</a></li>
+                        <li><a href="https://demo.invoiceplane.com/payments/online_logs">View Online Payment Logs</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Products</span>
+                        <i class="visible-md-inline fa fa-database"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/products/form">Create product</a></li>
+                        <li><a href="https://demo.invoiceplane.com/products/index">View Products</a></li>
+                        <li><a href="https://demo.invoiceplane.com/families/index">View Product Families</a></li>
+                        <li><a href="https://demo.invoiceplane.com/units/index">View Product Units</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown 1">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Tasks</span>
+                        <i class="visible-md-inline fa fa-check-square-o"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/tasks/form">Create Task</a></li>
+                        <li><a href="https://demo.invoiceplane.com/tasks/index">View Tasks</a></li>
+						<li role="separator" class="divider"></li>
+                        <li><a href="https://demo.invoiceplane.com/projects/form">Create Project</a></li>
+                        <li><a href="https://demo.invoiceplane.com/projects/index">View Projects</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Reports</span>
+                        <i class="visible-md-inline fa fa-bar-chart"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/reports/invoice_aging">Invoice Aging</a></li>
+                        <li><a href="https://demo.invoiceplane.com/reports/payment_history">Payment History</a></li>
+                        <li><a href="https://demo.invoiceplane.com/reports/sales_by_client">Sales by Client</a></li>
+                        <li><a href="https://demo.invoiceplane.com/reports/sales_by_year">Sales by Date</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+                            <script>
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
+    $(function () {
+        $('#filter').keyup(function () {
+            delay(function () {
+                $.post('https://demo.invoiceplane.com/filter/ajax/filter_clients',
+                    {
+                        filter_query: $('#filter').val()
+                    }, function (data) {
+                                                $('#filter_results').html(data);
+                    });
+            }, 1000);
+        });
+    });
+</script>                <form class="navbar-form navbar-left" role="search" onsubmit="return false;">
+                    <div class="form-group">
+                        <input id="filter" type="text" class="search-query form-control input-sm"
+                               placeholder="Filter Clients">
+                    </div>
+                </form>
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="https://wiki.invoiceplane.com/" target="_blank"
+                       class="tip icon" title="Documentation"
+                       data-placement="bottom">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="visible-xs">&nbsp;Documentation</span>
+                    </a>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="tip icon dropdown-toggle" data-toggle="dropdown"
+                       title="Settings"
+                       data-placement="bottom">
+                        <i class="fa fa-cogs"></i>
+                        <span class="visible-xs">&nbsp;Settings</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/custom_fields/index">Custom Fields</a></li>
+                        <li><a href="https://demo.invoiceplane.com/email_templates/index">Email Templates</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoice_groups/index">Invoice Groups</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoices/archive">Invoice Archive</a></li>
+                        <!-- // temporarily disabled
+                        <li><a href="https://demo.invoiceplane.com/item_lookups/index">Item Lookups</a></li>
+                        -->
+                        <li><a href="https://demo.invoiceplane.com/payment_methods/index">Payment Methods</a></li>
+                        <li><a href="https://demo.invoiceplane.com/tax_rates/index">Tax Rates</a></li>
+                        <li><a href="https://demo.invoiceplane.com/users/index">User Accounts</a></li>
+                        <li class="divider hidden-xs hidden-sm"></li>
+                        <li><a href="https://demo.invoiceplane.com/settings">System Settings</a></li>
+                        <li><a href="https://demo.invoiceplane.com/import">Import Data</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="https://demo.invoiceplane.com/users/form/1"
+                       class="tip icon" data-placement="bottom"
+                       title="InvoicePlane Demo User">
+                        <i class="fa fa-user"></i>
+                        <span class="visible-xs">&nbsp;InvoicePlane Demo User</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://demo.invoiceplane.com/sessions/logout"
+                       class="tip icon logout" data-placement="bottom"
+                       title="Logout">
+                        <i class="fa fa-power-off"></i>
+                        <span class="visible-xs">&nbsp;Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="main-area">
+    <div class="sidebar hidden-xs">
+    <ul>
+        <li>
+            <a href="https://demo.invoiceplane.com/clients/index" title="Clients"
+               class="tip" data-placement="right">
+                <i class="fa fa-users"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/quotes/index" title="Quotes"
+               class="tip" data-placement="right">
+                <i class="fa fa-file"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/invoices/index" title="Invoices"
+               class="tip" data-placement="right">
+                <i class="fa fa-file-text"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/payments/index" title="Payments"
+               class="tip" data-placement="right">
+                <i class="fa fa-money"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/products/index" title="Products"
+               class="tip" data-placement="right">
+                <i class="fa fa-database"></i>
+            </a>
+        </li>
+                    <li>
+                <a href="https://demo.invoiceplane.com/tasks/index" title="Tasks"
+                   class="tip" data-placement="right">
+                    <i class="fa fa-check-square-o"></i>
+                </a>
+            </li>
+                <li>
+            <a href="https://demo.invoiceplane.com/settings" title="System Settings"
+               class="tip" data-placement="right">
+                <i class="fa fa-cogs"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+    <div id="main-content">
+        <div id="headerbar">
+
+    <h1 class="headerbar-title">Clients</h1>
+
+    <div class="headerbar-item pull-right">
+        <button type="button" class="btn btn-default btn-sm submenu-toggle hidden-lg"
+                data-toggle="collapse" data-target="#ip-submenu-collapse">
+            <i class="fa fa-bars"></i> Submenu        </button>
+        <a class="btn btn-primary btn-sm" href="https://demo.invoiceplane.com/clients/form">
+            <i class="fa fa-plus"></i> New        </a>
+    </div>
+
+    <div class="headerbar-item pull-right visible-lg">
+        <div class="model-pager btn-group btn-group-sm"><a class="btn btn-default disabled" href="#" title="First"><i class="fa fa-fast-backward no-margin"></i></a><a class="btn btn-default disabled" href="#" title="Prev"><i class="fa fa-backward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/clients/status/active/25" title="Next"><i class="fa fa-forward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/clients/status/active/250" title="Last"><i class="fa fa-fast-forward no-margin"></i></a></div>    </div>
+
+    <div class="headerbar-item pull-right visible-lg">
+        <div class="btn-group btn-group-sm index-options">
+            <a href="https://demo.invoiceplane.com/clients/status/active"
+               class="btn btn-primary">
+                Active            </a>
+            <a href="https://demo.invoiceplane.com/clients/status/inactive"
+               class="btn  btn-default">
+                Inactive            </a>
+            <a href="https://demo.invoiceplane.com/clients/status/all"
+               class="btn  btn-default">
+                All            </a>
+        </div>
+    </div>
+
+</div>
+
+<div id="submenu">
+    <div class="collapse clearfix" id="ip-submenu-collapse">
+
+        <div class="submenu-row">
+            <div class="model-pager btn-group btn-group-sm"><a class="btn btn-default disabled" href="#" title="First"><i class="fa fa-fast-backward no-margin"></i></a><a class="btn btn-default disabled" href="#" title="Prev"><i class="fa fa-backward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/clients/status/active/25" title="Next"><i class="fa fa-forward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/clients/status/active/250" title="Last"><i class="fa fa-fast-forward no-margin"></i></a></div>        </div>
+
+        <div class="submenu-row">
+            <div class="btn-group btn-group-sm index-options">
+                <a href="https://demo.invoiceplane.com/clients/status/active"
+                   class="btn btn-primary">
+                    Active                </a>
+                <a href="https://demo.invoiceplane.com/clients/status/inactive"
+                   class="btn  btn-default">
+                    Inactive                </a>
+                <a href="https://demo.invoiceplane.com/clients/status/all"
+                   class="btn  btn-default">
+                    All                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="content" class="table-content">
+
+    
+    <div id="filter_results">
+        <div class="table-responsive">
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>Active</th>
+            <th>Client Name</th>
+            <th>Email Address</th>
+            <th>Phone Number</th>
+            <th class="amount">Balance</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/390">Acer Crop. Acer DG</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="becadbcdcafedfcdda90ddd1d3">[email&#160;protected]</a></td>
+                <td>1234567</td>
+                <td class="amount">$15.697,57</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/390">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/390">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="390">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="390">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/390"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/393">amd a</a></td>
+                <td></td>
+                <td>2313133.1321</td>
+                <td class="amount">$200,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/393">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/393">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="393">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="393">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/393"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/382">Anshu</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0968677a617c7b686365607f6c496e64686065276a6664">[email&#160;protected]</a></td>
+                <td>87220</td>
+                <td class="amount">$10.621,57</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/382">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/382">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="382">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="382">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/382"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/415">ARCHISMAN GHOSH</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/415">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/415">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="415">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="415">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/415"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/399">armin</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2041524d494e4d414c454b5a57444560474d41494c0e434f4d">[email&#160;protected]</a></td>
+                <td>9945534519</td>
+                <td class="amount">$27.097,93</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/399">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/399">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="399">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="399">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/399"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/410">asdasd asdsd</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/410">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/410">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="410">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="410">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/410"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/397">bidule</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$56,81</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/397">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/397">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="397">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="397">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/397"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/386">Bo  Jenkins</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e0a28fa08a858e8b898e93ce838f8dce8195">[email&#160;protected]</a></td>
+                <td>0248711711</td>
+                <td class="amount">$60,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/386">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/386">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="386">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="386">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/386"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/384">Bpb</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/384">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/384">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="384">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="384">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/384"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/381">Client  Test</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$23.092,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/381">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/381">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="381">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="381">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/381"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/420">Client</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/420">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/420">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="420">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="420">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/420"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/416">Client Name</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$3.000,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/416">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/416">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="416">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="416">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/416"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/358">Cliente Test</a></td>
+                <td></td>
+                <td>(11) 44444444</td>
+                <td class="amount">$1.371,20</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/358">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/358">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="358">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="358">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/358"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/225">Dent Arthur</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$1.253.411,65</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/225">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/225">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="225">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="225">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/225"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/400">Dfghh</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/400">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/400">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="400">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="400">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/400"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/277">diane diany</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/277">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/277">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="277">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="277">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/277"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/321">Dixie Spataro</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d1b6bfb2b2a3b4b5bfb4b2baa2e3e1e1e091b6bcb0b8bdffb2bebc">[email&#160;protected]</a></td>
+                <td>301-697-0816</td>
+                <td class="amount">$1.377.045,27</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/321">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/321">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="321">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="321">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/321"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/342">Eee</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$4.984,80</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/342">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/342">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="342">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="342">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/342"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/293">Eesha  Karunanayake</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$2.689.337,03</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/293">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/293">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="293">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="293">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/293"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/356">Emre</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$120.063,52</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/356">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/356">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="356">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="356">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/356"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/403">enduser</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$0,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/403">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/403">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="403">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="403">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/403"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/394">erica cassema</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81e4f3e8e2e0c1e6ece0e8edafe2eeec">[email&#160;protected]</a></td>
+                <td>990040236</td>
+                <td class="amount">$158,40</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/394">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/394">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="394">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="394">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/394"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/359">etst test</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b4c0d1c7c0f4d3d9d5ddd89ad7dbd9">[email&#160;protected]</a></td>
+                <td>1234567890</td>
+                <td class="amount">$100.000,00</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/359">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/359">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="359">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="359">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/359"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/392">Ezhil</a></td>
+                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e5828a8e9089849c8a8e80968da58288848c89cb868a88">[email&#160;protected]</a></td>
+                <td>06380145929</td>
+                <td class="amount">$1.196,22</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/392">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/392">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="392">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="392">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/392"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                    <tr>
+				<td>
+					<span class="label active">Yes</span>				</td>
+                <td><a href="https://demo.invoiceplane.com/clients/view/352">Faena</a></td>
+                <td></td>
+                <td></td>
+                <td class="amount">$4.545.661,95</td>
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/view/352">
+                                    <i class="fa fa-eye fa-margin"></i> View                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/clients/form/352">
+                                    <i class="fa fa-edit fa-margin"></i> Edit                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-quote"
+                                   data-client-id="352">
+                                    <i class="fa fa-file fa-margin"></i> Create Quote                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="client-create-invoice"
+                                   data-client-id="352">
+                                    <i class="fa fa-file-text fa-margin"></i> Create Invoice                                </a>
+                            </li>
+                            <li>
+                                <form action="https://demo.invoiceplane.com/clients/delete/352"
+                                      method="POST">
+                                    <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                    <button type="submit" class="dropdown-button"
+                                            onclick="return confirm('If you delete this client you will also delete any invoices, quotes and payments related to this client. Are you sure you want to permanently delete this client?');">
+                                        <i class="fa fa-trash-o fa-margin"></i> Delete                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                </tbody>
+    </table>
+</div>
+    </div>
+
+</div>
+    </div>
+
+</div>
+
+<div id="modal-placeholder"></div>
+
+<div id="fullpage-loader" style="display: none">
+    <div class="loader-content">
+        <i id="loader-icon" class="fa fa-cog fa-spin"></i>
+        <div id="loader-error" style="display: none">
+            It seems that the application stuck because of an error.<br/>
+            <a href="https://wiki.invoiceplane.com/en/1.0/general/faq"
+               class="btn btn-primary btn-sm" target="_blank">
+                <i class="fa fa-support"></i> Get Help            </a>
+        </div>
+    </div>
+    <div class="text-right">
+        <button type="button" class="fullpage-loader-close btn btn-link tip" aria-label="Close"
+                title="Close" data-placement="left">
+            <span aria-hidden="true"><i class="fa fa-close"></i></span>
+        </button>
+    </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script defer src="https://demo.invoiceplane.com/assets/core/js/scripts.js"></script>
+
+</body>
+</html>

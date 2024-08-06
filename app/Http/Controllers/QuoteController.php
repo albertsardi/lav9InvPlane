@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+use App\Http\Model\Common;
+use App\Http\Model\User;
+use App\Http\Model\Parameter;
+use App\Http\Model\Company;
+use Session;
+use HTML;
+
+//use App\Http\Requests;
+
+class QuoteController extends Controller
+{
+  public function view($formtype, $id='') {
+    //return 'view '.$id;
+
+    $data['head'] = DB::table('quotation')->first();
+    $transno = $data['head']->TransNo; 
+    $transno = 'DO.1800011'; //debug
+    // dd($data['head']->TransNo);
+    $detail = DB::table('transdetail')->where('TransNo',$transno)->orderBy('id','ASC')->select('ProductCode','ProductName','UOM','Qty','Price','Qty','Price','id')->get();
+    foreach($detail as $d) {
+        $d->Qty = abs($d->Qty);
+        $d->Amount = abs($d->Qty) * $d->Price; 
+    }
+    $detail = $this->array_value($detail);
+    //dd($detail);
+    $data['detail']=$detail;
+    if ($formtype=='form') return view('form_quotation', $data);
+    if ($formtype=='view') return view('view_quotation', $data);
+    return abort(404);
+  }
+
+  function array_value($arr) {
+      $out = [];
+      foreach($arr as $r) {
+        $out[] = array_values((array)$r);
+      }
+      return $out;
+  }
+
+
+}

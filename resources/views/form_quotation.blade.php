@@ -2,7 +2,9 @@
 
 @section('js')
 <!-- section js -->
-
+<!-- use version 0.20.2 -->
+<script lang="javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" type="text/css" />
 <script>
     Dropzone.autoDiscover = false;
 
@@ -10,6 +12,45 @@
     $(function () {
         //$('.nav-tabs').tab();
         //$('.tip').tooltip();
+
+        // init grid
+        const container = document.querySelector('#example');
+
+        // https://handsontable.com/docs/javascript-data-grid/installation/#_1-install-handsontable
+        var data = [
+                ['#','Product','Unit','qty','price','amount','subtotal'],
+                ['2019', 10, 11, 12, 13],
+                ['2020', 20, 11, 14, 13],
+                ['2021', 30, 15, 12, 13]
+            ];
+        var data2 = {!!json_encode($detail)!!}
+        const hot = new Handsontable(container, {
+            data: data2,
+            rowHeaders: true,
+            colHeaders: true,
+            height: 'auto',
+            autoWrapRow: true,
+            autoWrapCol: true,
+            licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
+            afterChange: function(changes, src) {
+                if (src !== 'loadData') {
+                    console.log('Row index: ' + changes[0][0])
+                    console.log(changes)
+                }
+    }
+        });
+        hot.addHook('edit',(row,amount)=> {
+            console.log('edit '+row+' '+amount)
+        })
+        // const hot1 = new Handsontable(document.getElementById('example'), {
+        //     afterChange: function(changes, source) {
+        //         // $.ajax({
+        //         //     url: "save.php',
+        //         //     data: change
+        //         // });
+        //         console.log('afterChange');
+        //     }
+        // });
 
         $('body').on('focus', '.datepicker', function () {
             $(this).datepicker({
@@ -458,9 +499,8 @@
 
 </div>
 
-<?php dump($data);?>
 <div id="headerbar">
-    <h1 class="headerbar-title">Quote #{{$data->TransNo}}</h1>
+    <h1 class="headerbar-title">Quote #{{$data->TransNo ??''}}</h1>
 
     <div class="headerbar-item pull-right">
         <div class="btn-group btn-group-sm">
@@ -603,7 +643,7 @@
 
                                 <div class="quote-properties">
                                     <label for="quote_number">Quote #</label>
-                                    <input type="text" id="quote_number" class="form-control input-sm" value="{{$data->TransNo}}">
+                                    <input type="text" id="quote_number" class="form-control input-sm" value="{{$data->TransNo??''}}">
                                 </div>
                                 <div class="quote-properties has-feedback">
                                     <label for="quote_date_created">Date</label>
@@ -674,67 +714,10 @@
         </div>
 
         <div class="row">
-            [table]
+            [table]-using hansontable
             <?php dump($detail);?>
-            <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">unit</th>
-                    <th scope="col">qty</th>
-                    <th scope="col">price</th>
-                    <th scope="col">amount</th>
-                    <th scope="col">subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($detail as $d)
-                <tr>
-                    <th scope="row">1</th>
-                    <td>
-                            <select name="PCode" id="family_id" class="form-control simple-select">
-                                @foreach($mProduct as $p)
-                                    <option value="{{$p->Code}}">{{$p->Code}} - {{$p->Name}}</option>
-                                @endforeach
-                            </select>
-                            {!! $form->select("ProductCode", $mProduct, $d->ProductCode??'') !!}
-                            <label for="family_id">{{$d->ProductName??''}}</label>
-                    </td>
-                    <td>
-                        <select name="Unit" id="family_id" class="form-control simple-select">
-                                <option value="0">pcs</option>
-                                <option value="26">doz</option>
-                                <option value="26">lusin</option>
-                            </select>
-                        </td>
-                    <td><input name="Qty" value="{{$d->Qty}}" class="text-right"/></td>
-                    <td><input name="Price" value="{{$d->Price}}" class="text-right"/></td>
-                    <td><input name="Amount" value="{{$d->Qty*$d->Price}}" disabled readonly class=" text-right"/></td>
-                    <td></td>
-                </tr>
-                @endforeach
-                <tr class='blankline'>
-                    <th scope="row">2</th>
-                    <td>
-                            {!! $form->select("ProductCode", $mProduct, '') !!}
-                            <label for="family_id">no-Product</label>
-                    </td>
-                    <td>
-                        <select name="Unit" id="family_id" class="form-control simple-select">
-                                <option value="0">pcs</option>
-                                <option value="26">doz</option>
-                                <option value="26">lusin</option>
-                            </select>
-                        </td>
-                    <td><input name="Qty" value="" class="text-right"/></td>
-                    <td><input name="Price" value="" class="text-right"/></td>
-                    <td><input name="Amount" value="" disabled readonly class=" text-right"/></td>
-                    <td></td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
+            <div id="example"></div>
+            </div>
 
 <br/>
 

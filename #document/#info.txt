@@ -1,0 +1,7 @@
+#info
+https://stackoverflow.com/questions/28788285/how-to-run-laravel-without-artisan
+f anyone wants to make the application public, the more easy and fastest way is:
+
+    Rename the "server.php" file in root directory, in "index.php"
+    Move your .htaccess from public folder to root directory
+    Make your directory accessible to Apache2 (set correct file/folder permissions).

@@ -16,10 +16,10 @@
 <link rel="stylesheet" href="http://localhost/lav9Invplane/public/assets/css/custom.css?v=1.6.1">
 <link rel="stylesheet" href="http://localhost/lav9Invplane/public/assets/css/fontawesome/font-awesome.min.css">
 
-<!-- <link rel="icon" type="image/png" href="{{ asset('/assets/images/favicon.ico') }}"> -->
 <link rel="stylesheet" href="{{ asset('/assets/css/style.css?v=1.6.1') }}">
 <!-- <link rel="stylesheet" href="http://localhost/lav9Invplane/assets/css/style.css?v=1.6.1"> -->
 <link href="{{ asset('storage/assets/css/fontawesome/font-awesome.min.css') }}" rel="stylesheet" type="text/css" >
+<!-- <link rel="icon" type="image/png" href="{{ asset('/assets/images/favicon.ico') }}"> -->
 
     <link rel="stylesheet" href="https://demo.invoiceplane.com/assets/invoiceplane/css/monospace.css?v=1.6.1">
 
@@ -141,10 +141,13 @@
 </script>
 </head>
 @php
-	function fcur($v) {
-		$v = $v ?? 0;
-		return number_format($v,2);
-	}
+    if (!function_exists("fcur")) {
+        function fcur($v) {
+            $v = $v ?? 0;
+
+            return number_format($v,2);
+        }
+    }
 @endphp
 <body class="hidden-sidebar">
 
@@ -273,18 +276,26 @@
                         <tbody>
 							@foreach($quotation as $q)
 							<tr>
-								<td><span class="label Draft">{{$q->Status??''}} {{$q->StatusText??''}}</td>
-								<td><a href="https://demo.invoiceplane.com/quotes/view/788">{{$q->TransNo??''}}</a></td>
+								<td>
+                                    @if($q->statusID==0)
+                                        <span class="label draft">Draft</span>
+                                    @elseif($q->StatusID==1)
+                                        <span class="label sent">Sent</span>
+                                    @elseif($q->StatusID==2)
+                                    <span class="label sent">Sent</span>
+                                    @else
+                                        {{$q->StatusID}}
+                                    @endif
+                                </td>
+								<td><a href="quotation/view/{{$q->id}}">{{$q->TransNo??''}}</a></td>
                                 <td><a href="https://demo.invoiceplane.com/clients/view/216">{{$q->AccName??''}}</a>                                </td>
                                 <td class="amount">Rp. {{$q->Total??0}}</td>
                                 <td style="text-align: center;"><a href="https://demo.invoiceplane.com/quotes/generate_pdf/788" title="Download PDF"><i class="fa fa-file-pdf-o"></i></a></td>
                             </tr>
 							@endforeach
-                            <tr>
+                            <!-- <tr>
                                 <td>
-                                <span class="label
-                                sent">
-                                    Sent                                </span>
+                                <span class="label sent">Sent</span>
                                 </td>
                                 <td>
                                     02.06.2024                                </td>
@@ -303,9 +314,7 @@
                             </tr>
                                                     <tr>
                                 <td>
-                                <span class="label
-                                sent">
-                                    Sent                                </span>
+                                <span class="label sent">Sent</span>
                                 </td>
                                 <td>
                                     02.06.2024                                </td>
@@ -324,9 +333,7 @@
                             </tr>
                                                     <tr>
                                 <td>
-                                <span class="label
-                                draft">
-                                    Draft                                </span>
+                                <span class="label draft">Draft</span>
                                 </td>
                                 <td>
                                     01.06.2024                                </td>
@@ -408,9 +415,7 @@
                             </tr>
                                                     <tr>
                                 <td>
-                                <span class="label
-                                sent">
-                                    Sent                                </span>
+                                <span class="label sent">Sent</span>
                                 </td>
                                 <td>
                                     01.06.2024                                </td>
@@ -472,7 +477,7 @@
                                                 <tr>
                             <td colspan="6" class="text-right small">
                                 <a href="https://demo.invoiceplane.com/quotes/status/all">View All</a>                            </td>
-                        </tr>
+                        </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -501,29 +506,25 @@
                         </thead>
                         <tbody>
 
-                                                    <tr>
+                            @foreach($invoice as $i)
+                            <tr>
                                 <td>
-                                    <span class="label draft">
-                                        Draft                                                                                                                    </span>
+                                    @if($q->Status==0)
+                                    <span class="label draft">Draft</span>
+                                    @elseif($q->Status==1)
+                                    <span class="label sent">Sent</span>
+                                    @endif 
                                 </td>
                                 <td>
-                                    <span class="">
-                                        02.07.2024                                    </span>
+                                    <span class="">{{$i->TransDate}}</span>
                                 </td>
-                                <td>
-                                    <a href="https://demo.invoiceplane.com/invoices/view/2408">REIG1202406-115</a>                                </td>
-                                <td>
-                                    <a href="https://demo.invoiceplane.com/clients/view/225">Dent Arthur</a>                                </td>
-                                <td class="amount">
-                                    595,00&nbsp;EUR                                </td>
-                                <td style="text-align: center;">
-                                                                            <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2408"
-                                           title="Download PDF">
-                                            <i class="fa fa-file-pdf-o"></i>
-                                        </a>
-                                                                    </td>
+                                <td><a href="invoices/view/{{$i->id}}">{{$i->TransNo}}</a></td>
+                                <td><a href="https://demo.invoiceplane.com/clients/view/225">{{$i->AccName}}</a></td>
+                                <td class="amount">Rp. {{$i->Total ?? 0}}</td>
+                                <td style="text-align: center;"><a href="https://demo.invoiceplane.com/invoices/generate_pdf/2408" title="Download PDF"><i class="fa fa-file-pdf-o"></i></a></td>
                             </tr>
-                                                    <tr>
+                            @endforeach
+                            <!-- <tr>
                                 <td>
                                     <span class="label sent">
                                         Sent                                                                                    &nbsp;<i class="fa fa-read-only" title="Read only"></i>
@@ -726,7 +727,7 @@
                                             <i class="fa fa-file-pdf-o"></i>
                                         </a>
                                                                     </td>
-                            </tr>
+                            </tr> -->
                                                 <tr>
                             <td colspan="6" class="text-right small">
                                 <a href="https://demo.invoiceplane.com/invoices/status/all">View All</a>                            </td>

@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+    <title>Aulas univirtuales</title>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="NOINDEX,NOFOLLOW">
+
+<link rel="icon" type="image/png" href="https://demo.invoiceplane.com/assets/core/img/favicon.png">
+
+<link rel="stylesheet" href="https://demo.invoiceplane.com/assets/invoiceplane_blue/css/style.css?v=1.6.1">
+<link rel="stylesheet" href="https://demo.invoiceplane.com/assets/core/css/custom.css?v=1.6.1">
+
+    <link rel="stylesheet" href="https://demo.invoiceplane.com/assets/invoiceplane_blue/css/monospace.css?v=1.6.1">
+
+<!--[if lt IE 9]>
+<script src="https://demo.invoiceplane.com/assets/core/js/legacy.min.js?v=1.6.1"></script>
+<![endif]-->
+
+<script src="https://demo.invoiceplane.com/assets/core/js/dependencies.min.js?v=1.6.1"></script>
+
+<script>
+    Dropzone.autoDiscover = false;
+
+    
+    $(function () {
+        $('.nav-tabs').tab();
+        $('.tip').tooltip();
+
+        $('body').on('focus', '.datepicker', function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: 'mm/dd/yyyy',
+                language: 'en',
+                weekStart: '0',
+                todayBtn: "linked"
+            });
+        });
+
+        $(document).on('click', '.create-invoice', function () {
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_create_invoice");
+        });
+
+        $(document).on('click', '.create-quote', function () {
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_create_quote");
+        });
+
+        $(document).on('click', '#btn_quote_to_invoice', function () {
+            var quote_id = $(this).data('quote-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_quote_to_invoice/" + quote_id);
+        });
+
+        $(document).on('click', '#btn_copy_invoice', function () {
+            var invoice_id = $(this).data('invoice-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_copy_invoice", {invoice_id: invoice_id});
+        });
+
+        $(document).on('click', '#btn_create_credit', function () {
+            var invoice_id = $(this).data('invoice-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_create_credit", {invoice_id: invoice_id});
+        });
+
+        $(document).on('click', '#btn_copy_quote', function () {
+            var quote_id = $(this).data('quote-id');
+            var client_id = $(this).data('client-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_copy_quote", {
+                quote_id: quote_id,
+                client_id: client_id
+            });
+        });
+
+        $(document).on('click', '.client-create-invoice', function () {
+            var client_id = $(this).data('client-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/invoices/ajax/modal_create_invoice", {client_id: client_id});
+        });
+
+        $(document).on('click', '.client-create-quote', function () {
+            var client_id = $(this).data('client-id');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/quotes/ajax/modal_create_quote", {client_id: client_id});
+        });
+
+        $(document).on('click', '.invoice-add-payment', function () {
+            var invoice_id = $(this).data('invoice-id');
+            var invoice_balance = $(this).data('invoice-balance');
+            var invoice_payment_method = $(this).data('invoice-payment-method');
+            var payment_cf_exist =  $(this).data('payment-cf-exist');
+            $('#modal-placeholder').load("https://demo.invoiceplane.com/payments/ajax/modal_add_payment", {
+                invoice_id: invoice_id,
+                invoice_balance: invoice_balance,
+                invoice_payment_method: invoice_payment_method,
+                payment_cf_exist: payment_cf_exist
+            });
+        });
+
+    });
+</script>
+</head>
+<body class="">
+
+<noscript>
+    <div class="alert alert-danger no-margin">Please enable Javascript to use InvoicePlane</div>
+</noscript>
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ip-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                Menu &nbsp; <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="ip-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="https://demo.invoiceplane.com/dashboard" class="hidden-md">Dashboard</a>                    <a href="https://demo.invoiceplane.com/dashboard" class="visible-md-inline-block"><i class="fa fa-dashboard"></i></a>                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Clients</span>
+                        <i class="visible-md-inline fa fa-users"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/clients/form">Add Client</a></li>
+                        <li><a href="https://demo.invoiceplane.com/clients/index">View Clients</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Quotes</span>
+                        <i class="visible-md-inline fa fa-file"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="create-quote">Create Quote</a></li>
+                        <li><a href="https://demo.invoiceplane.com/quotes/index">View Quotes</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Invoices</span>
+                        <i class="visible-md-inline fa fa-file-text"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="create-invoice">Create Invoice</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoices/index">View Invoices</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoices/recurring/index">View Recurring Invoices</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Payments</span>
+                        <i class="visible-md-inline fa fa-credit-card"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/payments/form">Enter Payment</a></li>
+                        <li><a href="https://demo.invoiceplane.com/payments/index">View Payments</a></li>
+                        <li><a href="https://demo.invoiceplane.com/payments/online_logs">View Online Payment Logs</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Products</span>
+                        <i class="visible-md-inline fa fa-database"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/products/form">Create product</a></li>
+                        <li><a href="https://demo.invoiceplane.com/products/index">View Products</a></li>
+                        <li><a href="https://demo.invoiceplane.com/families/index">View Product Families</a></li>
+                        <li><a href="https://demo.invoiceplane.com/units/index">View Product Units</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown 1">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Tasks</span>
+                        <i class="visible-md-inline fa fa-check-square-o"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/tasks/form">Create Task</a></li>
+                        <li><a href="https://demo.invoiceplane.com/tasks/index">View Tasks</a></li>
+						<li role="separator" class="divider"></li>
+                        <li><a href="https://demo.invoiceplane.com/projects/form">Create Project</a></li>
+                        <li><a href="https://demo.invoiceplane.com/projects/index">View Projects</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i> &nbsp;
+                        <span class="hidden-md">Reports</span>
+                        <i class="visible-md-inline fa fa-bar-chart"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/reports/invoice_aging">Invoice Aging</a></li>
+                        <li><a href="https://demo.invoiceplane.com/reports/payment_history">Payment History</a></li>
+                        <li><a href="https://demo.invoiceplane.com/reports/sales_by_client">Sales by Client</a></li>
+                        <li><a href="https://demo.invoiceplane.com/reports/sales_by_year">Sales by Date</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+                            <script>
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
+    $(function () {
+        $('#filter').keyup(function () {
+            delay(function () {
+                $.post('https://demo.invoiceplane.com/filter/ajax/filter_invoices',
+                    {
+                        filter_query: $('#filter').val()
+                    }, function (data) {
+                                                $('#filter_results').html(data);
+                    });
+            }, 1000);
+        });
+    });
+</script>                <form class="navbar-form navbar-left" role="search" onsubmit="return false;">
+                    <div class="form-group">
+                        <input id="filter" type="text" class="search-query form-control input-sm"
+                               placeholder="Filter Invoices">
+                    </div>
+                </form>
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="https://wiki.invoiceplane.com/" target="_blank"
+                       class="tip icon" title="Documentation"
+                       data-placement="bottom">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="visible-xs">&nbsp;Documentation</span>
+                    </a>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="tip icon dropdown-toggle" data-toggle="dropdown"
+                       title="Settings"
+                       data-placement="bottom">
+                        <i class="fa fa-cogs"></i>
+                        <span class="visible-xs">&nbsp;Settings</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://demo.invoiceplane.com/custom_fields/index">Custom Fields</a></li>
+                        <li><a href="https://demo.invoiceplane.com/email_templates/index">Email Templates</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoice_groups/index">Invoice Groups</a></li>
+                        <li><a href="https://demo.invoiceplane.com/invoices/archive">Invoice Archive</a></li>
+                        <!-- // temporarily disabled
+                        <li><a href="https://demo.invoiceplane.com/item_lookups/index">Item Lookups</a></li>
+                        -->
+                        <li><a href="https://demo.invoiceplane.com/payment_methods/index">Payment Methods</a></li>
+                        <li><a href="https://demo.invoiceplane.com/tax_rates/index">Tax Rates</a></li>
+                        <li><a href="https://demo.invoiceplane.com/users/index">User Accounts</a></li>
+                        <li class="divider hidden-xs hidden-sm"></li>
+                        <li><a href="https://demo.invoiceplane.com/settings">System Settings</a></li>
+                        <li><a href="https://demo.invoiceplane.com/import">Import Data</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="https://demo.invoiceplane.com/users/form/1"
+                       class="tip icon" data-placement="bottom"
+                       title="InvoicePlane Demo User">
+                        <i class="fa fa-user"></i>
+                        <span class="visible-xs">&nbsp;InvoicePlane Demo User</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://demo.invoiceplane.com/sessions/logout"
+                       class="tip icon logout" data-placement="bottom"
+                       title="Logout">
+                        <i class="fa fa-power-off"></i>
+                        <span class="visible-xs">&nbsp;Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="main-area">
+    <div class="sidebar hidden-xs">
+    <ul>
+        <li>
+            <a href="https://demo.invoiceplane.com/clients/index" title="Clients"
+               class="tip" data-placement="right">
+                <i class="fa fa-users"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/quotes/index" title="Quotes"
+               class="tip" data-placement="right">
+                <i class="fa fa-file"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/invoices/index" title="Invoices"
+               class="tip" data-placement="right">
+                <i class="fa fa-file-text"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/payments/index" title="Payments"
+               class="tip" data-placement="right">
+                <i class="fa fa-money"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://demo.invoiceplane.com/products/index" title="Products"
+               class="tip" data-placement="right">
+                <i class="fa fa-database"></i>
+            </a>
+        </li>
+                    <li>
+                <a href="https://demo.invoiceplane.com/tasks/index" title="Tasks"
+                   class="tip" data-placement="right">
+                    <i class="fa fa-check-square-o"></i>
+                </a>
+            </li>
+                <li>
+            <a href="https://demo.invoiceplane.com/settings" title="System Settings"
+               class="tip" data-placement="right">
+                <i class="fa fa-cogs"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+    <div id="main-content">
+        <div id="headerbar">
+
+    <h1 class="headerbar-title">Invoices</h1>
+
+    <div class="headerbar-item pull-right">
+        <button type="button" class="btn btn-default btn-sm submenu-toggle hidden-lg"
+                data-toggle="collapse" data-target="#ip-submenu-collapse">
+            <i class="fa fa-bars"></i> Submenu        </button>
+        <a class="create-invoice btn btn-sm btn-primary" href="#">
+            <i class="fa fa-plus"></i> New        </a>
+    </div>
+
+    <div class="headerbar-item pull-right visible-lg">
+        <div class="model-pager btn-group btn-group-sm"><a class="btn btn-default disabled" href="#" title="First"><i class="fa fa-fast-backward no-margin"></i></a><a class="btn btn-default disabled" href="#" title="Prev"><i class="fa fa-backward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/invoices/status/all/25" title="Next"><i class="fa fa-forward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/invoices/status/all/1225" title="Last"><i class="fa fa-fast-forward no-margin"></i></a></div>    </div>
+
+    <div class="headerbar-item pull-right visible-lg">
+        <div class="btn-group btn-group-sm index-options">
+            <a href="https://demo.invoiceplane.com/invoices/status/all"
+               class="btn btn-primary">
+                All            </a>
+            <a href="https://demo.invoiceplane.com/invoices/status/draft"
+               class="btn  btn-default">
+                Draft            </a>
+            <a href="https://demo.invoiceplane.com/invoices/status/sent"
+               class="btn  btn-default">
+                Sent            </a>
+            <a href="https://demo.invoiceplane.com/invoices/status/viewed"
+               class="btn  btn-default">
+                Viewed            </a>
+            <a href="https://demo.invoiceplane.com/invoices/status/paid"
+               class="btn  btn-default">
+                Paid            </a>
+            <a href="https://demo.invoiceplane.com/invoices/status/overdue"
+               class="btn  btn-default">
+                Overdue            </a>
+        </div>
+    </div>
+
+</div>
+
+<div id="submenu">
+    <div class="collapse clearfix" id="ip-submenu-collapse">
+
+        <div class="submenu-row">
+            <div class="model-pager btn-group btn-group-sm"><a class="btn btn-default disabled" href="#" title="First"><i class="fa fa-fast-backward no-margin"></i></a><a class="btn btn-default disabled" href="#" title="Prev"><i class="fa fa-backward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/invoices/status/all/25" title="Next"><i class="fa fa-forward no-margin"></i></a><a class="btn btn-default" href="https://demo.invoiceplane.com/invoices/status/all/1225" title="Last"><i class="fa fa-fast-forward no-margin"></i></a></div>        </div>
+
+        <div class="submenu-row">
+            <div class="btn-group btn-group-sm index-options">
+                <a href="https://demo.invoiceplane.com/invoices/status/all"
+                   class="btn btn-primary">
+                    All                </a>
+                <a href="https://demo.invoiceplane.com/invoices/status/draft"
+                   class="btn  btn-default">
+                    Draft                </a>
+                <a href="https://demo.invoiceplane.com/invoices/status/sent"
+                   class="btn  btn-default">
+                    Sent                </a>
+                <a href="https://demo.invoiceplane.com/invoices/status/viewed"
+                   class="btn  btn-default">
+                    Viewed                </a>
+                <a href="https://demo.invoiceplane.com/invoices/status/paid"
+                   class="btn  btn-default">
+                    Paid                </a>
+                <a href="https://demo.invoiceplane.com/invoices/status/overdue"
+                   class="btn  btn-default">
+                    Overdue                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="content" class="table-content">
+    <div id="filter_results">
+        <div class="table-responsive">
+    <table class="table table-hover table-striped">
+
+        <thead>
+        <tr>
+            <th>Status</th>
+            <th>Invoice</th>
+            <th>Created</th>
+            <th>Due Date</th>
+            <th>Client Name</th>
+            <th style="text-align: right;">Amount</th>
+            <th style="text-align: right;">Balance</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+
+        <tbody>
+                    <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2799"
+                       title="Edit">
+                        RE 07062024495                    </a>
+                </td>
+
+                <td>
+                    07/06/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/20/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/415"
+                       title="View Client">
+                        ARCHISMAN GHOSH                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2799">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2799"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2799">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2799"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2799"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2798"
+                       title="Edit">
+                        INV- 33                    </a>
+                </td>
+
+                <td>
+                    07/06/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/20/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2798">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2798"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2798">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2798"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2798"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2797"
+                       title="Edit">
+                        RE 07062024494                    </a>
+                </td>
+
+                <td>
+                    07/06/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/20/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/415"
+                       title="View Client">
+                        ARCHISMAN GHOSH                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2797">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2797"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2797">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2797"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2797"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label sent">
+                        Sent                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2796"
+                       title="Edit">
+                        RE 07052024493                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $426,68                </td>
+
+                <td class="amount">
+                    $426,68                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2796">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2796"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2796">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2796"
+                                   data-invoice-balance="426.68"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2795"
+                       title="Edit">
+                        RE 07052024492                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2795">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2795"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2795">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2795"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2795"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label sent">
+                        Sent                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2794"
+                       title="Edit">
+                        INV-232                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/409"
+                       title="View Client">
+                        SkyGlass Designer Event Hall                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2794">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2794"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2794">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2794"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2793"
+                       title="Edit">
+                        RE 07052024491                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2793">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2793"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2793">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2793"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2793"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2792"
+                       title="Edit">
+                        RE 07052024490                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/420"
+                       title="View Client">
+                        Client                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2792">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2792"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2792">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2792"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2792"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label sent">
+                        Sent                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2791"
+                       title="Edit">
+                        RE 07042024489                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2791">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2791"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2791">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2791"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label paid">
+                        Paid                                                    &nbsp;<i class="fa fa-read-only" title="Read only"></i>
+                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2790"
+                       title="Edit">
+                        RE 07042024488                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $1.048,95                </td>
+
+                <td class="amount">
+                    $1.048,95                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2790"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2790">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2790"
+                                   data-invoice-balance="1048.95"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2789"
+                       title="Edit">
+                        RE 07042024487                    </a>
+                </td>
+
+                <td>
+                    07/05/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/19/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2789">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2789"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2789">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2789"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2789"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                            &nbsp;<i class="fa fa-refresh" title="Recurring"></i>
+                                            </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2788"
+                       title="Edit">
+                        RE 07042024486                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/419"
+                       title="View Client">
+                        Miguel AC                    </a>
+                </td>
+
+                <td class="amount ">
+                    $120,00                </td>
+
+                <td class="amount">
+                    $120,00                </td>
+
+                <td>
+                    <div class="options btn-group">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2788">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2788"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2788">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2788"
+                                   data-invoice-balance="120.00"
+                                   data-invoice-payment-method="52">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2788"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2787"
+                       title="Edit">
+                        RE 07042024485                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $1.000,00                </td>
+
+                <td class="amount">
+                    $1.000,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2787">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2787"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2787">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2787"
+                                   data-invoice-balance="1000.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2787"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2786"
+                       title="Edit">
+                        RE 07042024484                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $5,40                </td>
+
+                <td class="amount">
+                    $5,40                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2786">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2786"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2786">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2786"
+                                   data-invoice-balance="5.40"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2786"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2785"
+                       title="Edit">
+                        RE 07042024483                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/397"
+                       title="View Client">
+                        bidule                    </a>
+                </td>
+
+                <td class="amount ">
+                    $56,81                </td>
+
+                <td class="amount">
+                    $56,81                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2785">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2785"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2785">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2785"
+                                   data-invoice-balance="56.81"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2785"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2784"
+                       title="Edit">
+                        RE 07042024482                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/352"
+                       title="View Client">
+                        Faena                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2784">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2784"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2784">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2784"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2784"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2783"
+                       title="Edit">
+                        RE 07042024481                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2783">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2783"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2783">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2783"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2783"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2782"
+                       title="Edit">
+                        RE 07042024480                    </a>
+                </td>
+
+                <td>
+                    07/04/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/18/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/352"
+                       title="View Client">
+                        Faena                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2782">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2782"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2782">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2782"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2782"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2781"
+                       title="Edit">
+                        RE 07032024479                    </a>
+                </td>
+
+                <td>
+                    07/03/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/17/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/418"
+                       title="View Client">
+                        Test 1000                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2781">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2781"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2781">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2781"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2781"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2780"
+                       title="Edit">
+                        RE 07032024478                    </a>
+                </td>
+
+                <td>
+                    07/03/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/17/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/381"
+                       title="View Client">
+                        Client  Test                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2780">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2780"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2780">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2780"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2780"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2779"
+                       title="Edit">
+                        26424                    </a>
+                </td>
+
+                <td>
+                    07/03/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/17/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/257"
+                       title="View Client">
+                        Hana Getachew                    </a>
+                </td>
+
+                <td class="amount ">
+                    $0,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2779">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2779"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2779">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2779"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2779"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label draft">
+                        Draft                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2778"
+                       title="Edit">
+                        RE 07032024477                    </a>
+                </td>
+
+                <td>
+                    07/03/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/17/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/417"
+                       title="View Client">
+                        musthafa                    </a>
+                </td>
+
+                <td class="amount ">
+                    $1.000,00                </td>
+
+                <td class="amount">
+                    $500,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2778">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2778"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2778">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2778"
+                                   data-invoice-balance="500.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                            <li>
+                                    <form action="https://demo.invoiceplane.com/invoices/delete/2778"
+                                          method="POST">
+                                        <input type="hidden" name="_ip_csrf" value="55bf919177c054f1b9cdbdea855a0517">                                        <button type="submit" class="dropdown-button"
+                                                onclick="return confirm('If you delete this invoice you will not be able to recover it later. Are you sure you want to permanently delete this invoice?');">
+                                            <i class="fa fa-trash-o fa-margin"></i> Delete                                        </button>
+                                    </form>
+                                </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label paid">
+                        Paid                                                    &nbsp;<i class="fa fa-read-only" title="Read only"></i>
+                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2777"
+                       title="Edit">
+                        RE 07032024476                    </a>
+                </td>
+
+                <td>
+                    07/01/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/15/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/390"
+                       title="View Client">
+                        Acer Crop. Acer DG                    </a>
+                </td>
+
+                <td class="amount ">
+                    $1.573,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2777"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2777">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2777"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="32">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label paid">
+                        Paid                                                    &nbsp;<i class="fa fa-read-only" title="Read only"></i>
+                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2776"
+                       title="Edit">
+                        RE 07032024475                    </a>
+                </td>
+
+                <td>
+                    07/03/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/17/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/236"
+                       title="View Client">
+                        OC COMPANY                    </a>
+                </td>
+
+                <td class="amount ">
+                    $120,00                </td>
+
+                <td class="amount">
+                    $0,00                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2776"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2776">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2776"
+                                   data-invoice-balance="0.00"
+                                   data-invoice-payment-method="0">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                        <tr>
+                <td>
+                    <span class="label sent">
+                        Sent                                                                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/invoices/view/2775"
+                       title="Edit">
+                        RE 07032024474                    </a>
+                </td>
+
+                <td>
+                    07/03/2024                </td>
+
+                <td>
+                    <span class="">
+                        07/17/2024                    </span>
+                </td>
+
+                <td>
+                    <a href="https://demo.invoiceplane.com/clients/view/381"
+                       title="View Client">
+                        Client  Test                    </a>
+                </td>
+
+                <td class="amount ">
+                    $96,39                </td>
+
+                <td class="amount">
+                    $96,39                </td>
+
+                <td>
+                    <div class="options btn-group dropup">
+                        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-cog"></i> Options                        </a>
+                        <ul class="dropdown-menu">
+                                                            <li>
+                                    <a href="https://demo.invoiceplane.com/invoices/view/2775">
+                                        <i class="fa fa-edit fa-margin"></i> Edit                                    </a>
+                                </li>
+                                                        <li>
+                                <a href="https://demo.invoiceplane.com/invoices/generate_pdf/2775"
+                                   target="_blank">
+                                    <i class="fa fa-print fa-margin"></i> Download PDF                                </a>
+                            </li>
+                            <li>
+                                <a href="https://demo.invoiceplane.com/mailer/invoice/2775">
+                                    <i class="fa fa-send fa-margin"></i> Send Email                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="invoice-add-payment"
+                                   data-invoice-id="2775"
+                                   data-invoice-balance="96.39"
+                                   data-invoice-payment-method="53">
+                                    <i class="fa fa-money fa-margin"></i>
+                                    Enter Payment                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </td>
+            </tr>
+                    </tbody>
+
+    </table>
+</div>
+    </div>
+</div>
+    </div>
+
+</div>
+
+<div id="modal-placeholder"></div>
+
+<div id="fullpage-loader" style="display: none">
+    <div class="loader-content">
+        <i id="loader-icon" class="fa fa-cog fa-spin"></i>
+        <div id="loader-error" style="display: none">
+            It seems that the application stuck because of an error.<br/>
+            <a href="https://wiki.invoiceplane.com/en/1.0/general/faq"
+               class="btn btn-primary btn-sm" target="_blank">
+                <i class="fa fa-support"></i> Get Help            </a>
+        </div>
+    </div>
+    <div class="text-right">
+        <button type="button" class="fullpage-loader-close btn btn-link tip" aria-label="Close"
+                title="Close" data-placement="left">
+            <span aria-hidden="true"><i class="fa fa-close"></i></span>
+        </button>
+    </div>
+</div>
+
+<script defer src="https://demo.invoiceplane.com/assets/core/js/scripts.js"></script>
+
+</body>
+</html>

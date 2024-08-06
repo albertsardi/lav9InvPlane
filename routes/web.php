@@ -33,4 +33,14 @@ Route::prefix('test')->group(function($e) {
     Route::get('reportPDF', 'TestController@reportPDF');
     Route::get('koolreport/chart', 'TestController@koolreportchart');
     Route::get('koolreport/chart/pdf', 'TestController@koolreportchart_pdf');
+
+    
+});
+
+//quotation
+Route::prefix('quotation')->group(function () {
+    // http://localhost/lav9Invplane/quotation/view/1718
+    Route::get('/{formtype}/{id}', 'App\Http\Controllers\QuoteController@view');
+    // http://localhost/lav9Invplane/quotation/edit/1718
+    //Route::get('/edit/{id}', 'App\Http\Controllers\QuoteController@edit');
 });
