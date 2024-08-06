@@ -24,6 +24,9 @@
 
 <script src="https://demo.invoiceplane.com/assets/core/js/dependencies.min.js?v=1.6.1"></script>
 <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+    .bold{font-weight: bold;}
+</style>
 
 @yield('js')
 

@@ -637,30 +637,21 @@
                 <div class="col-xs-12 col-sm-6 col-md-7">
                     <div class="details-box">
                         <div class="row">
-
                             <div class="col-xs-12 col-md-6">
 
                                 <div class="quote-properties">
                                     <label for="quote_number">Quote #</label>
-                                    <input type="text" id="quote_number" class="form-control input-sm" value="{{$data->TransNo??''}}">
+                                    <input type="text" id="quote_number" class="form-control input-sm bold" disabled value="{{$data->TransNo??''}}">
                                 </div>
                                 <div class="quote-properties has-feedback">
-                                    <label for="quote_date_created">Date</label>
-                                    <div class="input-group">
-                                        <input name="quote_date_created" id="quote_date_created" class="form-control input-sm datepicker" value="07/06/2024"/>
-                                        <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                    <label for="quote_date_created">Date :</label>
+                                    <input type="text" id="quote_number" class="form-control input-sm bold" disabled value="{{$data->TransDate??''}}">
                                     </div>
                                 </div>
                                 <div class="quote-properties has-feedback">
-                                    <label for="quote_date_expires">
-                                        Expires                                    </label>
+                                    <label for="quote_date_expires">Expires</label>
                                     <div class="input-group">
-                                        <input name="quote_date_expires" id="quote_date_expires"
-                                               class="form-control input-sm datepicker"
-                                               value="07/21/2024">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar fa-fw"></i>
-                                        </span>
+                                        <input type="text" class="form-control input-sm bold" disabled value="17/21/2024">
                                     </div>
                                 </div>
 
@@ -672,34 +663,11 @@
                                 <div class="quote-properties">
                                     <label for="quote_status_id">
                                         Status                                    </label>
-                                    <select name="quote_status_id" id="quote_status_id"
-                                            class="form-control input-sm simple-select" data-minimum-results-for-search="Infinity">
-                                                                                    <option value="1"
-                                                    selected="selected"
-                                                >
-                                                Draft                                            </option>
-                                                                                    <option value="2"
-                                                    >
-                                                Sent                                            </option>
-                                                                                    <option value="3"
-                                                    >
-                                                Viewed                                            </option>
-                                                                                    <option value="4"
-                                                    >
-                                                Approved                                            </option>
-                                                                                    <option value="5"
-                                                    >
-                                                Rejected                                            </option>
-                                                                                    <option value="6"
-                                                    >
-                                                Canceled                                            </option>
-                                                                            </select>
+                                        <input type="text" class="form-control input-sm" disabled value="17/21/2024">
                                 </div>
                                 <div class="quote-properties">
-                                    <label for="quote_password">
-                                        Quote PDF password (optional)                                    </label>
-                                    <input type="text" id="quote_password" class="form-control input-sm"
-                                           value="12345">
+                                    <label for="quote_password">Quote PDF password (optional)</label>
+                                    <input type="text" class="form-control input-sm" disabled value="12345">
                                 </div>
 
                                 
@@ -715,8 +683,31 @@
         <div class="row">
             [table]-using hansontable
             <?php dump($detail);?>
-            <div id="example"></div>
-            </div>
+            <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Price</th>
+                <th scope="col">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($detail as $no=>$d)
+                <tr>
+                <th scope="row">{{$no+1}}</th>
+                <td>{{$d[1]}}</td> <!-- product -->
+                <td>{{$d[2]}}</td> <!-- unit -->
+                <td>{{$d[3]}}</td> <!-- qty -->
+                <td>{{$d[4]}}</td> <!-- price -->
+                <td>{{$d[6]}}</td> <!-- amount -->
+                </tr>
+            @endforeach
+            </tbody>
+            </table>
+        </div>
 
 <br/>
 
