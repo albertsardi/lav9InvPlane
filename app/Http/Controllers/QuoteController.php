@@ -14,7 +14,7 @@ use HTML;
 
 //use App\Http\Requests;
 
-class QuoteController extends Controller
+class QuoteController extends MainController
 {
   public function view($formtype, $id='') {
     //return 'view '.$id;
@@ -39,13 +39,7 @@ class QuoteController extends Controller
     return abort(404);
   }
 
-  function array_value($arr) {
-      $out = [];
-      foreach($arr as $r) {
-        $out[] = array_values((array)$r);
-      }
-      return $out;
-  }
+  
 
 
 }
